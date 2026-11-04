@@ -13,7 +13,9 @@
 // index.html, manifest.json, or icon set. This forces the old cache to be discarded on activate,
 // so even the network-first fetch below always has a byte-for-byte fresh copy to fall back to
 // if the user goes offline right after an update.
-const CACHE_NAME = "hit-training-v3";
+// v4 (2026-11-04): new icon set (lime accent). Without this bump, devices kept serving the old
+// red icons from the v3 cache (icons are cache-first).
+const CACHE_NAME = "hit-training-v4";
 const ASSETS = [
   "./manifest.json",
   "./icons/icon-192-any.png",
