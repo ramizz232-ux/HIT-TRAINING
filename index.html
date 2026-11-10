@@ -180,6 +180,7 @@ Prima controlla sonno, alimentazione e che l'esecuzione sia rimasta la stessa.`}
     .loads td { padding: 2px 14px 2px 0; vertical-align: bottom; }
     .loads td.n { font-family: "Barlow Condensed", sans-serif; font-weight: 600; font-size: 11pt; }
     .loads td.r { color: #444; }
+    .loads td.n { white-space: nowrap; }
     .inl-load { margin-left: auto; white-space: nowrap; }
     .inl-load .n { font-family: "Barlow Condensed", sans-serif; font-weight: 600; font-size: 11pt; }
     .blank { display: inline-block; width: 46px; border-bottom: 1px solid #000; height: 11pt; vertical-align: bottom; }
@@ -192,24 +193,37 @@ Prima controlla sonno, alimentazione e che l'esecuzione sia rimasta la stessa.`}
     .page-wrap { padding: 14px; max-width: 210mm; margin: 0 auto; }
     @media print { .print-bar { display: none; } .page-wrap { padding: 0; max-width: none; } }
   </style>
-  <style id="pageA4">@page { size: A4; margin: 14mm; }</style>
-  <style id="pageMobile" disabled>
-    @page { size: 100mm auto; margin: 4mm; }
-    body { font-size: 10.5pt; }
-    h1 { font-size: 24pt; } h2 { font-size: 18pt; }
-    .ex-name { font-size: 11.5pt; } .ex-meta, .ex-line, .ex-prog { font-size: 9.5pt; }
+  <style id="pageA4" media="all">@page { size: A4; margin: 14mm; }</style>
+  <!-- Motore 79: il formato si cambia con l'attributo media ("all" / "not all"); l'attributo
+       "disabled" su <style> non esiste in HTML e veniva ignorato, quindi i due formati erano attivi
+       insieme. Telefono = A6 (105 \xD7 148 mm), formato standard presente anche nel menu carta di Android. -->
+  <style id="pageMobile" media="not all">
+    @page { size: 105mm 148mm; margin: 5mm; }
+    body { font-size: 10pt; }
+    h1 { font-size: 22pt; } h2 { font-size: 17pt; }
+    .seduta.first { margin-top: 10px; padding-top: 8px; }
+    .ex { grid-template-columns: 16px 1fr; column-gap: 6px; }
+    .ex-num { font-size: 13pt; }
+    .ex-name { font-size: 11pt; }
+    .dose { font-size: 12pt; }
+    .ex-dose { flex-wrap: wrap; row-gap: 0; }
+    .ex-meta, .ex-line, .ex-prog { font-size: 9pt; }
+    .inl-load { margin-left: 0; }
+    .scheda-note { font-size: 10pt; max-width: none; }
+    .page-wrap { max-width: 105mm; }
   </style></head>
   <body>
     <div class="print-bar">
-      <span>Anteprima: tocca per stampare o salvare come PDF</span>
+      <span>Telefono: nel menu di stampa scegli il formato carta A6</span>
       <div style="display:flex;gap:8px;align-items:center;">
         <button id="formatToggleBtn" class="alt" onclick="
-          var a4 = document.getElementById('pageA4');
           var mob = document.getElementById('pageMobile');
           var btn = document.getElementById('formatToggleBtn');
-          if (a4.disabled) { a4.disabled = false; mob.disabled = true; btn.textContent = 'A4'; }
-          else { a4.disabled = true; mob.disabled = false; btn.textContent = 'Telefono'; }
-        ">A4</button>
+          var toMobile = mob.media !== 'all';
+          mob.media = toMobile ? 'all' : 'not all';
+          document.getElementById('pageA4').media = toMobile ? 'not all' : 'all';
+          btn.textContent = toMobile ? 'Formato: telefono (A6)' : 'Formato: A4';
+        ">Formato: A4</button>
         <button onclick="window.print()">Stampa o PDF</button>
       </div>
     </div>
